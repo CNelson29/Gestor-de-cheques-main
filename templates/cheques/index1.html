@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}Gestión de Cheques{% endblock %}
+
+{% block content %}
+<h2>Cheques</h2>
+
+
+<!-- Tabla de cheques -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Número de cheque</th>
+            <th>Monto</th>
+            <th>Fecha de creacion</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cheque in cheques %}
+        <tr>
+            <td>{{ cheque.id }}</td>
+            <td>{{ cheque.numero_cheque }}</td>
+            <td>{{ cheque.monto }}</td>
+            <td>{{ cheque.fecha_registro }}</td>
+            <td>{{ cheque.estado }}</td>
+            <td>
+                <form action="{{ url_for('eliminar_cheque', id=cheque.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                </form>
+            
+                <form action="{{ url_for('editar_cheque', id=cheque.id) }}" method="POST , GET" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Editar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

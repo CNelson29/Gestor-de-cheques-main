@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block title %}Gestor de proveedores{% endblock %}
+
+{% block content %}
+
+<!-- Botón en forma de cruz para abrir la ventana modal de agregar proveedor -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProviderModal">
+    &#x271A; <!-- Cruz -->
+</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Tipo de Persona</th>
+            <th>Identificación</th>
+            <th>Balance</th>
+            <th>Cuenta Contable</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for proveedor in proveedores %}
+        <tr>
+            <td>{{ proveedor['id_proveedor'] }}</td>
+            <td>{{ proveedor['nombre'] }}</td>
+            <td>{{ proveedor['tipo_persona'] }}</td>
+            <td>{{ proveedor['identificacion'] }}</td>
+            <td>{{ proveedor['balance'] }}</td>
+            <td>{{ proveedor['cuenta_contable'] }}</td>
+            <td>{{ 'Activo' if proveedor['estado'] == '1' else 'Inactivo' }}</td>
+            <td>
+                <a href="{{ url_for('eliminar_proveedor', id=proveedor['id_proveedor']) }}" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<!-- Ventana Modal para agregar un proveedor -->
+<div class="modal fade" id="addProviderModal" tabindex="-1" aria-labelledby="addProviderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProviderModalLabel">Agregar Proveedor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('agregar_proveedor') }}">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+
+                    <label for="tipo_persona">Tipo de Persona:</label>
+                    <select id="tipo_persona" name="tipo_persona" required>
+                        <option value="Física">Física</option>
+                        <option value="Jurídica">Jurídica</option>
+                    </select>
+
+                    <label for="identificacion">Identificación:</label>
+                    <input type="text" id="identificacion" name="identificacion" required>
+
+                    <label for="balance">Balance:</label>
+                    <input type="number" id="balance" name="balance" step="0.01" required>
+
+                    <label for="cuenta_contable">Cuenta Contable:</label>
+                    <input type="text" id="cuenta_contable" name="cuenta_contable">
+
+                    <label for="estado">Estado:</label>
+                    <select id="estado" name="estado">
+                        <option value="1">Activo</option>
+                        <option value="0">Inactivo</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-success">Agregar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

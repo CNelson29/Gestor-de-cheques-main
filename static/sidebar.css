@@ -1,0 +1,43 @@
+/* Estilo del menú lateral */
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    background-color: #333;
+    overflow-x: hidden;
+    transition: 0.3s;
+    padding-top: 60px;
+}
+
+.sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+/* Botón de tres líneas (hamburguesa) */
+.menu-btn {
+    font-size: 30px;
+    cursor: pointer;
+    margin: 20px;
+    color: #333;
+}
+
+/* Clase para mostrar el menú lateral */
+.sidebar-open {
+    left: 0;
+}
+
+.content-shift {
+    margin-left: 250px;
+    transition: margin-left 0.3s;
+}

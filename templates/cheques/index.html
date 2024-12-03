@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+{% block title %}Gestión de Cheques{% endblock %}
+
+{% block content %}
+<h2>Gestión de Cheques</h2>
+
+<!-- Botón en forma de cruz para abrir la ventana modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addChequeModal">
+    &#x271A; <!-- Cruz -->
+    Agregar Cheque
+</button>
+
+<form action="/mover_cheques" method="POST">
+    <button type="submit">Mover Cheques</button>
+</form>
+
+<!-- Tabla de cheques -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Número de Solicitud</th>
+            <th>Monto</th>
+            <th>Fecha de Registro</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cheque in cheques %}
+        <tr>
+            <td>{{ cheque.id }}</td>
+            <td>{{ cheque.numero_solicitud }}</td>
+            <td>{{ cheque.monto }}</td>
+            <td>{{ cheque.fecha_registro }}</td>
+            <td>{{ cheque.estado }}</td>
+            <td>
+                <form action="{{ url_for('eliminar_solicitud', id=cheque.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                </form>
+            
+                <form action="{{ url_for('editar_solicitud', id=cheque.id) }}" method="POST , GET" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Editar</button>
+                </form>
+
+                <form action="{{ url_for('mover_cheque_especifico', cheque_id=cheque.id) }}" method="POST">
+                    <button type="submit" class="btn btn-success">Generar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Modal para agregar un cheque -->
+<div class="modal fade" id="addChequeModal" tabindex="-1" aria-labelledby="addChequeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addChequeModalLabel">Agregar Cheque</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('agregar_cheque') }}">
+                    <div class="form-group">
+                        <label for="numero_solicitud">Número de Solicitud:</label>
+                        <input type="text" id="numero_solicitud" name="numero_solicitud" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="proveedor_id">Proveedor:</label>
+                        {% if not proveedores %}
+                        <p>No hay proveedores disponibles.</p>
+                        {% else %}
+                        <select id="proveedor_id" name="proveedor_id" class="form-control" required>
+                            <option value="" disabled selected>Seleccione un proveedor</option>
+                            {% for proveedor in proveedores %}
+                            <option value="{{ proveedor.id_proveedor }}">{{ proveedor.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="monto">Monto:</label>
+                        <input type="number" id="monto" name="monto" class="form-control" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_registro">Fecha de Registro:</label>
+                        <input type="date" id="fecha_registro" name="fecha_registro" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado:</label>
+                        <select id="estado" name="estado" class="form-control">
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Anulada">Anulada</option>
+                            <option value="Cheque Generado">Cheque Generado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cuenta_contable_banco">Cuenta Contable del Banco:</label>
+                        <input type="text" id="cuenta_contable_banco" name="cuenta_contable_banco" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-success">Agregar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

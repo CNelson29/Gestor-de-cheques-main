@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}Edicion de Cheques{% endblock %}
+
+{% block content %}
+<h2>Gestión de Cheques</h2>
+
+<form method="post">
+    <label for="numero_solicitud">Número de Solicitud:</label>
+    <input type="text" name="numero_solicitud" id="numero_solicitud" value="{{ cheque.numero_solicitud }}" required>
+
+    <label for="proveedor_id">Proveedor:</label>
+    <select name="proveedor_id" id="proveedor_id" required>
+        {% for proveedor in proveedores %}
+        <option value="{{ proveedor.id_proveedor }}" {% if proveedor.id_proveedor == cheque.proveedor_id %}selected{% endif %}>
+            {{ proveedor.nombre }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <label for="monto">Monto:</label>
+    <input type="number" name="monto" id="monto" value="{{ cheque.monto }}" required>
+
+    <label for="fecha_registro">Fecha:</label>
+    <input type="date" name="fecha_registro" id="fecha_registro" value="{{ cheque.fecha_registro }}" required>
+
+    <label for="estado">Estado:</label>
+    <select name="estado" id="estado">
+        <option value="Pendiente">Pendiente</option>
+        <option value="Anulada">Anulada</option>
+        <option value="Cheque Generado">Cheque Generado</option>
+    </select>
+
+    <label for="cuenta_contable_banco">Cuenta Contable Banco:</label>
+    <input type="text" name="cuenta_contable_banco" id="cuenta_contable_banco" value="{{ cheque.cuenta_contable_banco }}">
+
+    <button type="submit">Guardar Cambios</button>
+</form>
+
+{% endblock %}
